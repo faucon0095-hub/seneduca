@@ -1,0 +1,83 @@
+<div class="dashboard">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <span class="brand">Sén<span class="gold">Educa</span></span>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="active">🏠 Tableau de bord</li>
+      <li>👨‍🎓 Mes élèves</li>
+      <li>📅 Mon planning</li>
+      <li>💰 Mes revenus</li>
+      <li>👤 Mon profil</li>
+    </ul>
+    <button class="btn-deconnexion" (click)="seDeconnecter()">
+      🚪 Se déconnecter
+    </button>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div>
+        <h1>Bonjour {{ repetiteur.nom }} 👋</h1>
+        <p>{{ repetiteur.email }}</p>
+      </div>
+      <div class="header-badge">
+        <span>👨‍🏫 Répétiteur</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card" *ngFor="let stat of stats">
+        <div class="stat-icon">{{ stat.icon }}</div>
+        <div class="stat-valeur">{{ stat.valeur }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </div>
+
+    <!-- Mes élèves -->
+    <div class="section-title">👨‍🎓 Mes élèves</div>
+    <div class="eleves-table">
+      <div class="table-head">
+        <div>Nom</div>
+        <div>Niveau</div>
+        <div>Matière</div>
+        <div>Statut</div>
+      </div>
+      <div class="table-row" *ngFor="let eleve of eleves">
+        <div>{{ eleve.nom }}</div>
+        <div>{{ eleve.niveau }}</div>
+        <div>{{ eleve.matiere }}</div>
+        <div>
+          <span class="badge" [class.actif]="eleve.statut === 'actif'">
+            {{ eleve.statut }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="section-title">⚡ Actions rapides</div>
+    <div class="actions-grid">
+      <div class="action-card">
+        <div class="action-icon">📅</div>
+        <div class="action-label">Gérer mon planning</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">💬</div>
+        <div class="action-label">Contacter un élève</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">💰</div>
+        <div class="action-label">Voir mes revenus</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">👤</div>
+        <div class="action-label">Modifier mon profil</div>
+      </div>
+    </div>
+  </div>
+</div>

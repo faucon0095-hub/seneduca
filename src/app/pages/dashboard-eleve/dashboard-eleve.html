@@ -1,0 +1,79 @@
+<div class="dashboard" *ngIf="!chargement">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <span class="brand">Sén<span class="gold">Educa</span></span>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="active">🏠 Tableau de bord</li>
+      <li>📚 Mes cours</li>
+      <li>📅 Réservations</li>
+      <li>💰 Paiements</li>
+      <li>👤 Mon profil</li>
+    </ul>
+    <button class="btn-deconnexion" (click)="seDeconnecter()">
+      🚪 Se déconnecter
+    </button>
+  </div>
+
+  <!-- Contenu principal -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div>
+        <h1>Bonjour 👋</h1>
+        <p>{{ utilisateur?.email }}</p>
+      </div>
+      <div class="header-badge">
+        <span>👨‍🎓 Élève</span>
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-grid">
+      <div class="stat-card" *ngFor="let stat of stats">
+        <div class="stat-icon">{{ stat.icon }}</div>
+        <div class="stat-valeur">{{ stat.valeur }}</div>
+        <div class="stat-label">{{ stat.label }}</div>
+      </div>
+    </div>
+
+    <!-- Prochain cours -->
+    <div class="section-title">📅 Prochain cours</div>
+    <div class="prochain-cours">
+      <div class="cours-info">
+        <div class="cours-matiere">{{ prochainCours.matiere }}</div>
+        <div class="cours-details">
+          <span>👨‍🏫 {{ prochainCours.repetiteur }}</span>
+          <span>📍 {{ prochainCours.type }}</span>
+          <span>🕐 {{ prochainCours.heure }}</span>
+        </div>
+      </div>
+      <div class="cours-date">{{ prochainCours.date }}</div>
+    </div>
+
+    <!-- Actions rapides -->
+    <div class="section-title">⚡ Actions rapides</div>
+    <div class="actions-grid">
+      <div class="action-card">
+        <div class="action-icon">🔍</div>
+        <div class="action-label">Trouver un répétiteur</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">📅</div>
+        <div class="action-label">Réserver une séance</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">💬</div>
+        <div class="action-label">Contacter via WhatsApp</div>
+      </div>
+      <div class="action-card">
+        <div class="action-icon">📊</div>
+        <div class="action-label">Voir ma progression</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="chargement" *ngIf="chargement">
+  <div class="spinner"></div>
