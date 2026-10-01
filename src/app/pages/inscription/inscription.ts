@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { AuthService, Role } from '../../services/auth';
 
 @Component({
   selector: 'app-inscription',
@@ -17,7 +17,7 @@ export class Inscription {
   email = '';
   telephone = '';
   motDePasse = '';
-  role = 'parent';
+  role: Role = 'parent';
   erreur = '';
   chargement = false;
 
@@ -30,7 +30,8 @@ export class Inscription {
     this.erreur = '';
     this.chargement = true;
     try {
-await this.authService.inscription(this.email, this.motDePasse);      this.router.navigate(['/dashboard-eleve']);
+      await this.authService.inscription(this.email, this.motDePasse, this.nom, this.telephone, this.role);
+      this.router.navigate([this.authService.routeDashboard(this.role)]);
     } catch (error: any) {
       this.erreur = 'Erreur lors de l\'inscription. Vérifiez vos informations.';
     } finally {
