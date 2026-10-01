@@ -12,7 +12,7 @@
       <li>👤 Mon profil</li>
     </ul>
     <button class="btn-deconnexion" (click)="seDeconnecter()">
-      🚪 Se déconnecter
+      🚪 Déconnexion
     </button>
   </div>
 
@@ -21,11 +21,11 @@
     <!-- Header -->
     <div class="dashboard-header">
       <div>
-        <h1>Bonjour {{ repetiteur.nom }} 👋</h1>
-        <p>{{ repetiteur.email }}</p>
+        <h1>Bonjour {{ profil()?.nom }} 👋</h1>
+        <p>{{ profil()?.email }}</p>
       </div>
       <div class="header-badge">
-        <span>👨‍🏫 Répétiteur</span>
+        <span>👨‍🏫 {{ profil()?.role ? libellesRole[profil()!.role] : 'Répétiteur' }}</span>
       </div>
     </div>
 

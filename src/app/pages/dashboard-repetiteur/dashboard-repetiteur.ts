@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService, LIBELLES_ROLE, ProfilUtilisateur } from '../../services/auth';
 
 @Component({
   selector: 'app-dashboard-repetiteur',
@@ -9,9 +10,20 @@ import { RouterModule } from '@angular/router';
   templateUrl: './dashboard-repetiteur.html',
   styleUrl: './dashboard-repetiteur.css'
 })
-export class DashboardRepetiteur {
+export class DashboardRepetiteur implements OnInit {
 
-  repetiteur = { email: 'repetiteur@seneduca.com', nom: 'Professeur Diallo' };
+  profil = signal<ProfilUtilisateur | null>(null);
+  libellesRole = LIBELLES_ROLE;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  async ngOnInit() {
+    this.profil.set(await this.authService.profilCourant());
+  }
+
 
   stats = [
     { icon: '👨‍🎓', label: 'Élèves actifs', valeur: '0' },
@@ -24,8 +36,9 @@ export class DashboardRepetiteur {
     { nom: 'En attente', niveau: '-', matiere: '-', statut: 'inactif' }
   ];
 
-  seDeconnecter() {
-    window.location.href = '/login';
+  async seDeconnecter() {
+    await this.authService.deconnexion();
+    this.router.navigate(['/login']);
   }
 
 }

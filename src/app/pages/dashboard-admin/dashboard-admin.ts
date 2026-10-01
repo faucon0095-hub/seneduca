@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService, LIBELLES_ROLE, ProfilUtilisateur } from '../../services/auth';
 
 @Component({
   selector: 'app-dashboard-admin',
@@ -9,7 +10,19 @@ import { RouterModule } from '@angular/router';
   templateUrl: './dashboard-admin.html',
   styleUrl: './dashboard-admin.css'
 })
-export class DashboardAdmin {
+export class DashboardAdmin implements OnInit {
+
+  profil = signal<ProfilUtilisateur | null>(null);
+  libellesRole = LIBELLES_ROLE;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  async ngOnInit() {
+    this.profil.set(await this.authService.profilCourant());
+  }
 
   stats = [
     { icon: '👨‍🎓', label: 'Élèves actifs', valeur: '0', couleur: '#0D1B6E' },
@@ -22,8 +35,9 @@ export class DashboardAdmin {
     { nom: 'En attente', niveau: '-', matiere: '-', ville: '-', statut: 'nouveau' }
   ];
 
-  seDeconnecter() {
-    window.location.href = '/login';
+  async seDeconnecter() {
+    await this.authService.deconnexion();
+    this.router.navigate(['/login']);
   }
 
 }

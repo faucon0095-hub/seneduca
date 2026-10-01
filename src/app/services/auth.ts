@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Auth, authState, signInWithEmailAndPassword,
-         createUserWithEmailAndPassword, signOut, User } from '@angular/fire/auth';
+import { Auth, authState, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+         sendPasswordResetEmail, signOut, User } from '@angular/fire/auth';
 import { Firestore, doc, getDoc, setDoc, serverTimestamp } from '@angular/fire/firestore';
 import { firstValueFrom } from 'rxjs';
 
@@ -9,6 +9,13 @@ export type Role = 'parent' | 'eleve' | 'repetiteur' | 'admin';
 // Rôles qu'un utilisateur peut choisir lui-même à l'inscription.
 // 'admin' n'en fait jamais partie : il est attribué manuellement dans Firestore.
 export const ROLES_INSCRIPTION: Role[] = ['parent', 'eleve', 'repetiteur'];
+
+export const LIBELLES_ROLE: Record<Role, string> = {
+  parent: 'Parent',
+  eleve: 'Élève',
+  repetiteur: 'Répétiteur',
+  admin: 'Administrateur'
+};
 
 export interface ProfilUtilisateur {
   nom: string;
@@ -40,6 +47,26 @@ export class AuthService {
 
   deconnexion() {
     return signOut(this.auth);
+  }
+
+  reinitialiserMotDePasse(email: string) {
+    return sendPasswordResetEmail(this.auth, email);
+  }
+
+  // Profil Firestore de l'utilisateur connecté (null si non connecté).
+  async profilCourant(): Promise<ProfilUtilisateur | null> {
+    const user = await this.utilisateurCourant();
+    if (!user) {
+      return null;
+    }
+    const snap = await getDoc(doc(this.firestore, 'users', user.uid));
+    const data = snap.exists() ? snap.data() : {};
+    return {
+      nom: data['nom'] ?? '',
+      email: data['email'] ?? user.email ?? '',
+      telephone: data['telephone'] ?? '',
+      role: data['role'] as Role
+    };
   }
 
   // Attend que Firebase ait restauré la session avant de répondre.

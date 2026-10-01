@@ -13,7 +13,7 @@
       <li>⚙️ Paramètres</li>
     </ul>
     <button class="btn-deconnexion" (click)="seDeconnecter()">
-      🚪 Se déconnecter
+      🚪 Déconnexion
     </button>
   </div>
 
@@ -23,10 +23,10 @@
     <div class="dashboard-header">
       <div>
         <h1>Dashboard Admin 🛡️</h1>
-        <p>Bienvenue Habib — SénEduca</p>
+        <p>Bienvenue {{ profil()?.nom }} — {{ profil()?.email }}</p>
       </div>
       <div class="header-badge">
-        <span>⚙️ Administrateur</span>
+        <span>⚙️ {{ profil()?.role ? libellesRole[profil()!.role] : 'Administrateur' }}</span>
       </div>
     </div>
 
