@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService, Role } from '../../services/auth';
+import { messageErreurAuth } from '../../services/auth-erreurs';
 
 @Component({
   selector: 'app-inscription',
@@ -18,8 +19,8 @@ export class Inscription {
   telephone = '';
   motDePasse = '';
   role: Role = 'parent';
-  erreur = '';
-  chargement = false;
+  erreur = signal('');
+  chargement = signal(false);
 
   constructor(
     private authService: AuthService,
@@ -27,15 +28,19 @@ export class Inscription {
   ) {}
 
   async sInscrire() {
-    this.erreur = '';
-    this.chargement = true;
+    this.erreur.set('');
+    if (this.motDePasse.length < 6) {
+      this.erreur.set('Le mot de passe est trop court (6 caractères minimum).');
+      return;
+    }
+    this.chargement.set(true);
     try {
-      await this.authService.inscription(this.email, this.motDePasse, this.nom, this.telephone, this.role);
+      await this.authService.inscription(this.email.trim(), this.motDePasse, this.nom, this.telephone, this.role);
       this.router.navigate([this.authService.routeDashboard(this.role)]);
-    } catch (error: any) {
-      this.erreur = 'Erreur lors de l\'inscription. Vérifiez vos informations.';
+    } catch (error: unknown) {
+      this.erreur.set(messageErreurAuth(error));
     } finally {
-      this.chargement = false;
+      this.chargement.set(false);
     }
   }
 

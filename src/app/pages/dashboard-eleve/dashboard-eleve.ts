@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
+import { AuthService, LIBELLES_ROLE, ProfilUtilisateur } from '../../services/auth';
 
 @Component({
   selector: 'app-dashboard-eleve',
@@ -9,9 +10,20 @@ import { RouterModule } from '@angular/router';
   templateUrl: './dashboard-eleve.html',
   styleUrl: './dashboard-eleve.css'
 })
-export class DashboardEleve {
+export class DashboardEleve implements OnInit {
 
-  utilisateur = { email: 'habib@seneduca.com' };
+  profil = signal<ProfilUtilisateur | null>(null);
+  libellesRole = LIBELLES_ROLE;
+
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
+
+  async ngOnInit() {
+    this.profil.set(await this.authService.profilCourant());
+  }
+
   chargement = false;
 
   stats = [
@@ -29,8 +41,9 @@ export class DashboardEleve {
     type: 'domicile'
   };
 
-  seDeconnecter() {
-    window.location.href = '/login';
+  async seDeconnecter() {
+    await this.authService.deconnexion();
+    this.router.navigate(['/login']);
   }
 
 }

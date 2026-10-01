@@ -6,8 +6,8 @@
     <h2>Créer un compte</h2>
     <p>Rejoignez SénEduca gratuitement</p>
 
-    <div class="erreur" *ngIf="erreur">
-      ⚠️ {{ erreur }}
+    <div class="erreur" *ngIf="erreur()">
+      ⚠️ {{ erreur() }}
     </div>
 
     <div class="form-group">
@@ -27,7 +27,7 @@
 
     <div class="form-group">
       <label>Mot de passe</label>
-      <input type="password" [(ngModel)]="motDePasse" placeholder="••••••••" />
+      <input type="password" [(ngModel)]="motDePasse" placeholder="6 caractères minimum" />
     </div>
 
     <div class="form-group">
@@ -38,8 +38,8 @@
       </select>
     </div>
 
-    <button class="btn-submit" (click)="sInscrire()" [disabled]="chargement">
-      {{ chargement ? '⏳ Inscription...' : '📲 Créer mon compte' }}
+    <button class="btn-submit" (click)="sInscrire()" [disabled]="chargement()">
+      {{ chargement() ? '⏳ Inscription...' : '📲 Créer mon compte' }}
     </button>
 
     <div class="login-links">
