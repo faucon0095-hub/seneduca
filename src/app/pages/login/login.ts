@@ -27,8 +27,14 @@ export class Login {
     this.erreur = '';
     this.chargement = true;
     try {
-      await this.authService.login(this.email, this.motDePasse);
-      this.router.navigate(['/dashboard-eleve']);
+      const { user } = await this.authService.login(this.email, this.motDePasse);
+      const role = await this.authService.getRole(user.uid);
+      if (!role) {
+        await this.authService.deconnexion();
+        this.erreur = 'Profil introuvable. Contactez le support.';
+        return;
+      }
+      this.router.navigate([this.authService.routeDashboard(role)]);
     } catch (error: any) {
       this.erreur = 'Email ou mot de passe incorrect.';
     } finally {
